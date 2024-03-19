@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 #include <cstring>
+#include <cstdint>
+#include <cstddef>
 
 #define ONE_BYTE   0b0000'0000 // first bit 0
 #define TWO_BYTE   0b1100'0000 // first three bits 110
