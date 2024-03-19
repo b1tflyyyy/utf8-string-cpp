@@ -1,1 +1,34 @@
+name: UTF-8 String C++ CI
 
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Update System
+        run: sudo apt -y update
+
+      - name: Configure CMake
+        run: |
+          mkdir build
+          cd build
+          cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ ..
+
+      - name: Build App
+        run: |
+          cd build
+          cmake --build .
+
+      - name: Running Tests
+        run: |
+          cd build/tests
+          ./Tests
