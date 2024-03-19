@@ -14,8 +14,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install new clang-17
-        run: sudo apt -y install clang-17 --install-suggests
+      - name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: "17.0"
 
       - name: Update System
         run: sudo apt -y update
