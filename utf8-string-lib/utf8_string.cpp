@@ -14,34 +14,88 @@ namespace utf8
     std::istream& operator>>(std::istream& is, ustring& ustr)
     {
         // TODO: .............................................
+        throw std::runtime_error("operator >> for utf8::ustring not implemented yet !");
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    constexpr ustring::ustring()
+    ustring::ustring()
     {
         Symbols_Info.reserve(100);
         String.reserve(100);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    ustring::ustring(const char* utf8_str)
+    ustring::ustring(const std::size_t bytes_reserve)
     {
-        Symbols_Info.reserve(100);
-        String.reserve(100);
+        Symbols_Info.reserve(bytes_reserve);
+        String.reserve(bytes_reserve);
+    }
 
-        // TODO: redo this part
-        std::size_t next_symbol_position{}; // next symbol position in bytes
-        for (std::size_t i{}; utf8_str[i] != '\0'; ++i)
+    // -----------------------------------------------------------------------------------------------------------------
+    ustring::ustring(const char* default_string) : ustring(100)
+    {
+        Copy_With_Metadata_To_Internal_String(default_string);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    ustring::ustring(const char* default_string, const std::size_t bytes_reserve) : ustring(bytes_reserve)
+    {
+        Copy_With_Metadata_To_Internal_String(default_string);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    ustring::ustring(const std::basic_string<char>& default_string) : ustring(default_string.c_str(), default_string.size() * 2)
+    { }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    ustring::ustring(const std::basic_string_view<char>& default_string) : ustring(default_string.data(), default_string.size() *  2)
+    { }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    ustring::ustring(const ustring& other)
+    {
+        String = other.String;
+        Symbols_Info = other.Symbols_Info;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    ustring::ustring(ustring&& other) noexcept
+    {
+        String = std::move(other.String);
+        Symbols_Info = std::move(other.Symbols_Info);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    ustring& ustring::operator=(const ustring& other)
+    {
+        if (this != &other)
         {
-            String.push_back(utf8_str[i]);
-            if (next_symbol_position == i) // if it`s beginning of a symbol
-            {
-                std::uint8_t symbol_size{ Get_Size_Of_Symbol(utf8_str[i]) };
-                Symbols_Info.push_back(SSymbol_Info{ symbol_size, next_symbol_position });
-
-                next_symbol_position += symbol_size;
-            }
+            String = other.String;
+            Symbols_Info = other.Symbols_Info;
         }
+
+        return *this;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    ustring& ustring::operator=(ustring&& other) noexcept
+    {
+        String = std::move(other.String);
+        Symbols_Info = std::move(other.Symbols_Info);
+
+        return *this;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    bool ustring::operator==(const ustring& other) const
+    {
+        return (String == other.String);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    bool ustring::operator!=(const ustring& other) const
+    {
+        return (String != other.String);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -81,6 +135,12 @@ namespace utf8
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    const std::basic_string<char>& ustring::get_c_str() const
+    {
+        return String;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
     std::uint8_t ustring::Get_Size_Of_Symbol(std::uint8_t symbol)
     {
         if (!((symbol ^ ONE_BYTE) >> 7))
@@ -109,6 +169,23 @@ namespace utf8
         for (std::size_t i{ start_pos }; i < Symbols_Info.size(); ++i)
         {
             Symbols_Info[i].Symbol_Offset += new_offset;
+        }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    void ustring::Copy_With_Metadata_To_Internal_String(const char* default_string)
+    {
+        std::size_t next_symbol_position{}; // next symbol position in bytes
+        for (std::size_t i{}; default_string[i] != '\0'; ++i)
+        {
+            String.push_back(default_string[i]);
+            if (next_symbol_position == i) // if it`s beginning of a symbol
+            {
+                std::uint8_t symbol_size{ Get_Size_Of_Symbol(default_string[i]) };
+                Symbols_Info.push_back(SSymbol_Info{ symbol_size, next_symbol_position });
+
+                next_symbol_position += symbol_size;
+            }
         }
     }
 }
