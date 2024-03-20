@@ -166,3 +166,26 @@ TEST(utf8_string, operators)
     ASSERT_EQ(copy_data, copy_data_second.get_c_str());
     ASSERT_EQ(copy_data_first, copy_data_second);
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
+TEST(utf8_string, comparison_operators)
+{
+    utf8::ustring ustr{ "привет" };
+    std::string str{ ustr.get_c_str() };
+    std::string_view str_view { ustr.get_c_str() };
+    const char* c_str{ "привет" };
+
+    bool result_1{ ustr == str };
+    bool result_2{ ustr == str_view };
+    bool result_3{ ustr == c_str };
+    ASSERT_EQ(result_1, true);
+    ASSERT_EQ(result_2, true);
+    ASSERT_EQ(result_3, true);
+
+    bool result_4{ ustr != str };
+    bool result_5{ ustr != str_view };
+    bool result_6{ ustr != c_str };
+    ASSERT_EQ(result_4, false);
+    ASSERT_EQ(result_5, false);
+    ASSERT_EQ(result_6, false);
+}
