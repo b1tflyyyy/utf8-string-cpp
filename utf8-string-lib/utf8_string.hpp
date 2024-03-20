@@ -59,7 +59,14 @@ namespace utf8
         ustring& operator=(ustring&& other) noexcept;
 
         bool operator==(const ustring& other) const;
+        bool operator==(const char* other) const;
+        bool operator==(const std::basic_string<char>& other) const;
+        bool operator==(const std::basic_string_view<char>& other) const;
+
         bool operator!=(const ustring& other) const;
+        bool operator!=(const char* other) const;
+        bool operator!=(const std::basic_string<char>& other) const;
+        bool operator!=(const std::basic_string_view<char>& other) const;
 
         // TODO: ...............................................
         char& operator[](std::size_t index) = delete;
