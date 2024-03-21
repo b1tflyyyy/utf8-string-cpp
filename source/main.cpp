@@ -27,21 +27,40 @@
 
 int main()
 {
+    std::string str{ };
+    str.reserve(1'000);
 
-#if 1
-    utf8::ustring str{ "привет" };
+    std::string a{ "s" };
+    std::string b{ "п" };
+    std::string c{ "\xf0\x92\x8d\x87" };
 
-    str.replace_char("s", 0);
-    str.replace_char("g", 0);
-    str.replace_char("п", 0);
-    str.replace_char("s", 3);
-    str.replace_char("g", 4);
-    str.replace_char("п", 3);
-    str.replace_char("\xf0\x92\x8d\x87", 2);
-    str.replace_char("g", 2);
-    str.replace_char("مرحبا", 2);
+    for (std::size_t i{}; i < 5'000; ++i)
+    {
+        str += a;
+        str += b;
+        str += c;
+    }
 
-    std::cout << str << '\n';
+    std::chrono::duration<double> res{ };
+
+#if 0
+    auto start = std::chrono::high_resolution_clock::now();
+
+    utf8::ustring tmp{ str };
+    for (std::size_t i{}; i < 1'000'000'000; ++i)
+    {
+        tmp.replace_char("s", 0);
+        tmp.replace_char("ы", 300);
+        tmp.replace_char("\xf0\x92\x8d\x87", 1234);
+        tmp.replace_char("ы", 789);
+        tmp.replace_char("\xf0\x92\x8d\x87", 1900);
+    }
+
+    auto end = std::chrono::high_resolution_clock::now();
+    res = end - start;
+
+    std::cout << res.count() << "s\n";
+    std::cout << tmp << '\n';
 #endif
 
     return 0;

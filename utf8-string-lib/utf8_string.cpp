@@ -170,9 +170,19 @@ namespace utf8
             std::basic_string<char> new_string{ };
             new_string.resize(old_string_size + new_symbol_size - old_symbol_info.Symbol_Size); // calculate & resize new string size
 
-            std::memcpy(new_string.data(), String.c_str(), replace_position); // copy bytes to a new string before idx
-            std::memcpy((new_string.data() + replace_position), new_symbol.data(), new_symbol_size); // insert a new symbol by idx
-            std::memcpy((new_string.data() + replace_position + new_symbol_size), (String.c_str() + replace_position + old_symbol_info.Symbol_Size), old_string_size - replace_position); // copy bytes after inserted symbol
+            for (std::size_t i{}, counter{}; i < old_string_size;)
+            {
+                if (i == replace_position)
+                {
+                    std::memcpy(new_string.data() + i, new_symbol.data(), new_symbol_size);
+                    counter += new_symbol_size;
+                    i += old_symbol_info.Symbol_Size;
+
+                    continue;
+                }
+
+                new_string[counter++] = String[i++];
+            }
 
             auto new_offset{ static_cast<std::ptrdiff_t>(new_symbol_size) - static_cast<std::ptrdiff_t>(old_symbol_info.Symbol_Size) };
             Recalculate_Symbols_Offset(idx + 1, new_offset);
