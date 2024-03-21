@@ -47,4 +47,4 @@ ustr == str; // false
 - Add new features.
 - Docs.
 
-#### ----------------------- © 2024 Andrii (AKA b1tflyyyy). All rights reserved. -----------------------
+### © 2024 Andrii (AKA b1tflyyyy). All rights reserved.
