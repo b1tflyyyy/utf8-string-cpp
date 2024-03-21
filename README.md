@@ -1,7 +1,7 @@
 ## ⚙️ UTF-8 String For C++ (utf8::ustring)
 
 ## 📜 Brief Description:
-This is an implementation of the `UTF-8` encoding standard for `C++`, the implementation is based on the `std::basic_string\<char\>` class, this gives us the advantage of `std::basic_string\<char\>` class functions, as well as compatibility with some functions from the standard library.
+This is an implementation of the `UTF-8` encoding standard for `C++`, the implementation is based on the `std::basic_string<char>` class, this gives us the advantage of `std::basic_string<char>` class functions, as well as compatibility with some functions from the standard library.
 
 ## 📝 Code Style:
 - `C++ AStyle` code style was used for this project.
@@ -46,7 +46,5 @@ ustr == str; // false
 - Write/read to file.
 - Add new features.
 - Docs.
-  
-<div style="text-align: center;">
-  © 2024 Andrii (AKA b1tflyyyy). All rights reserved.
-</div>
+
+### ------------------ © 2024 Andrii (AKA b1tflyyyy). All rights reserved. ------------------
