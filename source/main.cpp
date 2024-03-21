@@ -44,11 +44,6 @@ int main()
     std::chrono::duration<double> res{ };
 
 #if 0
-    // 14.1757s
-    // 14.343s
-    // 14.3311s
-
-    // 14.28
     auto start = std::chrono::high_resolution_clock::now();
 
     utf8::ustring tmp{ str };
