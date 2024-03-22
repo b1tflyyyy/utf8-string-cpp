@@ -35,8 +35,11 @@ namespace utf8
     // -----------------------------------------------------------------------------------------------------------------
     std::istream& operator>>(std::istream& is, ustring& ustr)
     {
-        // TODO: .............................................
-        throw std::runtime_error("operator >> for utf8::ustring not implemented yet !");
+        std::basic_string<char> tmp{ };
+        is >> tmp;
+
+        ustr.Copy_With_Metadata_To_Internal_String(tmp.c_str());
+        return is;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
