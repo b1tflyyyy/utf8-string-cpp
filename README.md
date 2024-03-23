@@ -16,10 +16,11 @@ This is an implementation of the `UTF-8` encoding standard for `C++`, the implem
 
 ## 💫 Library Features:
 - Support for creating an object from: `std::string, std::string_view, const char*`
-- Comparing an `utf8::ustring` with `utf8::ustring` (comparison with `const char*`, `std::string`, `std::string_view` will be added in the future)
+- Comparing an `utf8::ustring` with `utf8::ustring`, `const char*`, `std::string`, `std::string_view`
 - Copy/Move (<- assignment also) constructor implemented 
 - O(1) Random Access
 - Simple replacement of any character, e.g. a smaller character `(1 byte)` with a larger character `(2-3-4 bytes)`.
+- Write/read to a file
 
 ## ⚡️ Performance Test:
 | String-Version |        Test-Name        | iteration count | time (for all iterations) | 
@@ -43,8 +44,6 @@ ustr == str; // false
 ```
 
 ## ⭐️ Coming Soon:
-- Write/read to file.
-- Add new features.
 - Docs.
 
 ### © 2024 Andrii (AKA b1tflyyyy). All rights reserved.
