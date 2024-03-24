@@ -189,3 +189,16 @@ TEST(utf8_string, comparison_operators)
     ASSERT_EQ(result_5, false);
     ASSERT_EQ(result_6, false);
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
+TEST(utf8_string, index_operator)
+{
+    utf8::ustring::uchar expected{ "п" };
+    utf8::ustring ustr{ "привет" };
+
+    ASSERT_EQ(expected, ustr[0]);
+    ASSERT_NE(expected, ustr[1]);
+
+    ustr.replace_char("s", 0);
+    ASSERT_EQ(utf8::ustring::uchar{ "s" }, ustr[0]);
+}
