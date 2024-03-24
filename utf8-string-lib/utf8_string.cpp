@@ -160,6 +160,17 @@ namespace utf8
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    const ustring::uchar ustring::operator[](std::size_t index) const
+    {
+        const SSymbol_Info& symbol_info{ Symbols_Info[index] };
+
+        ustring::uchar tmp{ };
+        std::memcpy(tmp.data(), String.c_str() + symbol_info.Symbol_Offset, symbol_info.Symbol_Size);
+
+        return tmp;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
     void ustring::replace_char(std::basic_string_view<char> new_symbol, std::size_t idx)
     {
         SSymbol_Info& old_symbol_info{ Symbols_Info[idx] };
@@ -173,6 +184,7 @@ namespace utf8
             std::basic_string<char> new_string{ };
             new_string.resize(old_string_size + new_symbol_size - old_symbol_info.Symbol_Size); // calculate & resize new string size
 
+            // TODO: refactor
             for (std::size_t i{}, counter{}; i < old_string_size;)
             {
                 if (i == replace_position)

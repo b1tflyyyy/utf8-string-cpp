@@ -27,6 +27,7 @@
 #include <cstring>
 #include <cstdint>
 #include <cstddef>
+#include <array>
 #include <stdexcept>
 
 #define ONE_BYTE   0b0000'0000 // first bit 0
@@ -38,6 +39,9 @@ namespace utf8
 {
     class ustring
     {
+    public:
+        typedef std::array<char, 5> uchar;
+
     public:
         friend std::ostream& operator<<(std::ostream& os, const ustring& ustr);
         friend std::istream& operator>>(std::istream& is, ustring& ustr);
@@ -68,9 +72,7 @@ namespace utf8
         bool operator!=(const std::basic_string<char>& other) const;
         bool operator!=(const std::basic_string_view<char>& other) const;
 
-        // TODO: ...............................................
-        char& operator[](std::size_t index) = delete;
-        const char& operator[](std::size_t index) const = delete;
+        const ustring::uchar operator[](std::size_t index) const;
 
         void replace_char(std::basic_string_view<char> new_symbol, std::size_t idx);
 
