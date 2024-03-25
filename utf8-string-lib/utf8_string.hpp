@@ -54,7 +54,7 @@ namespace utf8
         explicit ustring(const std::basic_string<char>& default_string);
         explicit ustring(const std::basic_string_view<char>& default_string);
 
-        constexpr ~ustring() = default;
+        ~ustring() = default;
 
         explicit ustring(const ustring& other);
         explicit ustring(ustring&& other) noexcept;
@@ -80,9 +80,10 @@ namespace utf8
         [[nodiscard]] const std::basic_string<char>& get_c_str() const;
 
     private:
-        std::uint8_t Get_Size_Of_Symbol(std::uint8_t symbol);
-        void Recalculate_Symbols_Offset(std::size_t start_pos, std::ptrdiff_t new_offset);
-        void Copy_With_Metadata_To_Internal_String(const char* default_string);
+        [[clang::always_inline, gnu::always_inline]] __inline__ std::uint8_t Get_Size_Of_Symbol(std::uint8_t symbol);
+        [[clang::always_inline, gnu::always_inline]] __inline__ void Recalculate_Symbols_Offset(std::size_t start_pos, std::ptrdiff_t new_offset);
+        [[clang::always_inline, gnu::always_inline]] __inline__ void Copy_With_Metadata_To_Internal_String(const char* default_string);
+        [[clang::always_inline, gnu::always_inline]] __inline__ void Copy_With_Char_Replacing(std::size_t old_string_size, std::size_t replace_position, std::size_t old_symbol_size, std::size_t new_symbol_size, std::basic_string<char>& dest, std::basic_string_view<char> new_symbol);
 
     private:
         struct SSymbol_Info

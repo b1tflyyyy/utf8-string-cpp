@@ -162,10 +162,8 @@ namespace utf8
     // -----------------------------------------------------------------------------------------------------------------
     const ustring::uchar ustring::operator[](std::size_t index) const
     {
-        const SSymbol_Info& symbol_info{ Symbols_Info[index] };
-
         ustring::uchar tmp{ };
-        std::memcpy(tmp.data(), String.c_str() + symbol_info.Symbol_Offset, symbol_info.Symbol_Size);
+        std::memcpy(tmp.data(), String.c_str() + Symbols_Info[index].Symbol_Offset, Symbols_Info[index].Symbol_Size);
 
         return tmp;
     }
@@ -184,20 +182,7 @@ namespace utf8
             std::basic_string<char> new_string{ };
             new_string.resize(old_string_size + new_symbol_size - old_symbol_info.Symbol_Size); // calculate & resize new string size
 
-            // TODO: refactor
-            for (std::size_t i{}, counter{}; i < old_string_size;)
-            {
-                if (i == replace_position)
-                {
-                    std::memcpy(new_string.data() + i, new_symbol.data(), new_symbol_size);
-                    counter += new_symbol_size;
-                    i += old_symbol_info.Symbol_Size;
-
-                    continue;
-                }
-
-                new_string[counter++] = String[i++];
-            }
+            Copy_With_Char_Replacing(old_string_size, replace_position, old_symbol_info.Symbol_Size, new_symbol_size, new_string, new_symbol);
 
             auto new_offset{ static_cast<std::ptrdiff_t>(new_symbol_size) - static_cast<std::ptrdiff_t>(old_symbol_info.Symbol_Size) };
             Recalculate_Symbols_Offset(idx + 1, new_offset);
@@ -269,6 +254,27 @@ namespace utf8
 
                 next_symbol_position += symbol_size;
             }
+        }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    void ustring::Copy_With_Char_Replacing(std::size_t old_string_size, std::size_t replace_position, std::size_t old_symbol_size, std::size_t new_symbol_size, std::basic_string<char>& dest, std::basic_string_view<char> new_symbol)
+    {
+        // src_counter -> String
+        // dest counter -> new/dest string
+        for (std::size_t src_counter{}, dest_counter{}; src_counter < old_string_size;)
+        {
+            if (src_counter == replace_position)
+            {
+                std::memcpy(dest.data() + replace_position, new_symbol.data(), new_symbol_size); // write new symbol in the replacing position
+
+                dest_counter += new_symbol_size; // skip new symbol in replace_position
+                src_counter += old_symbol_size; // skip old symbol in the same position
+
+                continue;
+            }
+
+            dest[dest_counter++] = String[src_counter++];
         }
     }
 }
